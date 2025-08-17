@@ -1,6 +1,6 @@
 import { IsIn } from 'class-validator';
 
 export class ChangeStatusDto {
-  @IsIn(["Created", "In Progress", "Blocked", "Finished", "Cancelled"])
+  @IsIn(["Creada", "En Progreso", "Bloqueada", "Finalizada", "Cancelada"])
   completed: string;
 }

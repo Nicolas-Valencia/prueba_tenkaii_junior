@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException,} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, BadRequestException,} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './create-task.dto';
 import { UpdateTaskDto } from './update-task.dto';
@@ -9,7 +9,13 @@ export class TaskController {
 
   @Get()
   async getAllTasks() {
-    return this.taskService.getAllTasks();
+    const tasks = await this.taskService.getAllTasks();
+
+    if (!tasks || tasks.length === 0) {
+      throw new NotFoundException('No tasks found');
+    }
+
+    return tasks;
   }
 
   @Get(':id')
@@ -29,12 +35,22 @@ export class TaskController {
   }
 
   @Put(':id')
-  async updateTask(id: number, data: UpdateTaskDto) {
-    return this.taskService.updateTask(id, data);
+  async updateTask(@Param('id') id: string, @Body() data: UpdateTaskDto) {
+    return this.taskService.updateTask(Number(id), data);
   }
 
   @Put(':id/status')
   async changeStatus(@Param('id') id: string, @Body('status') status: string) {
+    if (!status) {
+      throw new NotFoundException('Status is required');
+    }
+
+    const validStatuses = ["Creada", "En Progreso", "Bloqueada", "Finalizada", "Cancelada"];
+
+    if (!validStatuses.includes(status)) {
+      throw new NotFoundException(`Invalid status: ${status}`);
+    }
+
     return this.taskService.changeStatus(Number(id), status);
   }
 

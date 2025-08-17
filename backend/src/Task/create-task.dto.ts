@@ -8,8 +8,8 @@ export class CreateTaskDto {
   description: string;
 
   @IsOptional()
-  @IsIn(["Created", "In Progress", "Blocked", "Finished", "Cancelled"])
-  status?: string = "Created"; // default
+  @IsIn(["Creada", "En Progreso", "Bloqueada", "Finalizada", "Cancelada"])
+  status?: string = "Creada"; 
 
   @IsString()
   assignedTo: string;
