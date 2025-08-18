@@ -4,6 +4,8 @@ import { getTasks, updateTask } from "../services/taskService";
 import type { Task } from "../types/Task";
 import TaskCard from "./taskCard"; // 👈 ahora usamos el TaskCard unificado
 import "../styles/kanban.css";
+import ModalCreateTask from "./modalCreateTask";
+import CreateTaskForm from "./createTaskForm";
 
 const columns = ["Creada", "En Progreso", "Bloqueada", "Finalizada", "Cancelada"];
 
@@ -26,6 +28,17 @@ function Column({ id, children }: { id: string; children: React.ReactNode }) {
 // --- KanbanBoard principal ---
 export default function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const loadTasks = async () => {
+    try {
+      const data = await getTasks();
+      setTasks(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   // Cargar tareas desde backend
   useEffect(() => {
@@ -59,18 +72,59 @@ export default function KanbanBoard() {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className="kanban-board">
-        {columns.map((col) => (
-          <Column key={col} id={col}>
-            {tasks
-              .filter((t) => t.status === col)
-              .map((task) => (
+    <>
+      {/* Botón */}
+      <div className="">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className=""
+        >
+          Añadir tarea
+        </button>
+      </div>
+
+      {/* Modal con formulario */}
+      <ModalCreateTask
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}>
+
+        <CreateTaskForm
+          onTaskCreated={() => {
+            setIsModalOpen(false);
+            loadTasks(); // refrescar después de crear
+          }}
+        />
+      </ModalCreateTask>
+
+      {/* Tablero */}
+      <DndContext onDragEnd={handleDragEnd}>
+        <div className="kanban-board">
+          {columns.map((col) => (
+            <Column key={col} id={col}>
+              {tasks.filter((t) => t.status === col).map((task) => (
                 <TaskCard key={task.id} task={task} />
               ))}
-          </Column>
-        ))}
-      </div>
-    </DndContext>
+            </Column>
+          ))}
+        </div>
+      </DndContext>
+    </>
   );
+
+  // return (
+
+  //   <DndContext onDragEnd={handleDragEnd}>
+  //     <div className="kanban-board">
+  //       {columns.map((col) => (
+  //         <Column key={col} id={col}>
+  //           {tasks
+  //             .filter((t) => t.status === col)
+  //             .map((task) => (
+  //               <TaskCard key={task.id} task={task} />
+  //             ))}
+  //         </Column>
+  //       ))}
+  //     </div>
+  //   </DndContext>
+  // );
 }

@@ -9,7 +9,7 @@ export class TaskService {
   constructor(private prisma: PrismaService) {}
 
   async getAllTasks(): Promise<Task[]> {
-    return this.prisma.task.findMany({ include: { user: true } });
+    return this.prisma.task.findMany();
   }
 
   async getTaskById(id: number): Promise<Task | null> {
@@ -18,15 +18,11 @@ export class TaskService {
     });
   }
 
-  async createTask(dto: CreateTaskDto) {
-  return this.prisma.task.create({
-    data: {
-      title: dto.title,
-      description: dto.description,
-      userId: dto.userId,
-    },
-  });
-}
+  async createTask(data: CreateTaskDto): Promise<Task> {
+    return this.prisma.task.create({
+      data,
+    });
+  }
 
   async updateTask(id: number, data: UpdateTaskDto): Promise<Task> {
     return this.prisma.task.update({

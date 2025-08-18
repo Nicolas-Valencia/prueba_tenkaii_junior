@@ -37,14 +37,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                     {task.title}
                 </h3>
 
-                <p className=""
-                >{task.assignedTo}</p>
+                <p className="" 
+                >{task.user?.name}</p>
 
                 {expanded && (
                     <div className="">
                         <p><strong>Descripción completa:</strong> {task.description}</p>
                         <p><strong>Estado:</strong> {task.status}</p>
-                        <p><strong>Responsable:</strong> {task.assignedTo}</p>
+                        <p><strong>Responsable:</strong> {task.user?.name}</p>
                         <p><strong>Creada:</strong> {new Date(task.createdAt).toLocaleString()}</p>
                     </div>
                 )}

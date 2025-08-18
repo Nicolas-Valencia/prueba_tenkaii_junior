@@ -1,0 +1,45 @@
+version: "3.8"
+
+networks:
+  tekai-net:
+    driver: bridge
+
+volumes:
+  n8n_data:
+  prisma_data:
+
+services:
+  api:
+    container_name: api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - tekai-net
+    volumes:
+      - ./backend:/app
+      - prisma_data:/app/prisma
+    command: npm run start:prod   # o start:dev si tienes nodemon en Docker
+
+  n8n:
+    container_name: n8n
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin123
+      # Si vas a usar OpenAI node:
+      # - OPENAI_API_KEY=tu_api_key
+    networks:
+      - tekai-net
+    volumes:
+      - n8n_data:/home/node/.n8n

@@ -11,7 +11,7 @@ export const getTasks = async (): Promise<Task[]> => {
 
 // Crear nueva tarea
 export const createTask = async (
-  task: Omit<Task, "id" | "createdAt" | "updatedAt">
+  task: Omit<Task, "id" | "createdAt" | "updatedAt" | "User" | "status">
 ) => {
   const res = await axios.post(API_URL, task);
   return res.data;
