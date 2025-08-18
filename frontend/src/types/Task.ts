@@ -4,6 +4,6 @@ export interface Task {
   description: string;
   status: string;
   assignedTo: string;
-  createdAt: string;
+  createdAt: Date;
   updatedAt: string;
 }

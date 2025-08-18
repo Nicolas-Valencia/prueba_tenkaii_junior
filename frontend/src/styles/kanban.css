@@ -1,34 +1,57 @@
 .kanban-board {
-  display: flex;
-  gap: 16px;
-  padding: 20px;
-  background: #f4f4f4;
-  min-height: 60vh;
-  border-radius: 15px;
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: #f4f4f4;
+    min-height: 60vh;
+    border-radius: 15px;
 }
 
 .kanban-column {
-  flex: 1;
-  min-height: 400px;
-  min-width: 10vw;
-  background: #fff;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: background 0.2s;
+    flex: 1;
+    min-height: 400px;
+    width: 13vw;
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .kanban-column h3 {
-  text-align: center;
-  margin-bottom: 12px;
-  color: #000;
+    text-align: center;
+    margin-bottom: 12px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
 }
 
 .kanban-task {
-  padding: 10px;
-  margin-bottom: 8px;
-  background: #020508;
-  border-radius: 6px;
-  cursor: grab;
-  font-weight: 500;
+    padding-top: 3px;
+    margin: 0 auto;
+    margin-bottom: 8px;
+    background: #020508;
+    border-radius: 6px;
+    cursor: grab;
+    font-weight: 700;
+}
+
+.kanban-task h3 {color:#f4f4f4;}
+
+.button_expand {
+    width: 100%;
+    margin: 0;
+    background: #f4f4f4;
+    border: 1px solid #020508;
+    color: #020508;
+    border-radius: 0;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    cursor: pointer;
+}
+
+.button_expand:focus, .button_expand:active, .button_expand:hover {
+    outline: none;
+    border: 1px solid #020508;
 }
