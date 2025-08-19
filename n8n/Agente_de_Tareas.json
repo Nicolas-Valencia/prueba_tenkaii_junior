@@ -1,0 +1,151 @@
+{
+  "name": "Agente de Tareas",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c28c30ab-da38-4d1b-ac25-773e960a6f5d",
+      "name": "When chat message received",
+      "webhookId": "fe002147-e6bf-4953-b88d-50b3b1b05a44"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Eres un asistente virtual que debe brindar cualquier información que el usuario pida sobre la base de datos, puedes hacer consultas Get sobre ella e interpretar los datos para dar una respuesta acertada.\nEstás limitado solamente a responder preguntas que tengan que ver sobre la base de datos y la aplicación(tareas, usuarios), en caso de recibir una pregunta de un tema aparte debes responder algo como \"Lo siento, estoy programado para responder preguntas sobre las tareas y usuarios de la aplicación.\"\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "a6041e38-8bf8-4202-8da8-c5791325153b",
+      "name": "Agente tareas",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "notesInFlow": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Hace un http request, analiza los datos y da una respuesta coherente con la pregunta del usuario",
+        "url": "http://api:3000/tasks",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        256
+      ],
+      "id": "f4c3bfc2-c763-47da-9b05-4dc3e53e0170",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        192
+      ],
+      "id": "b66fbeb1-20eb-4714-ba7d-df75079b8267",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LVzBNMR2uVeR8S0e",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Hace un http request, analiza los datos y da una respuesta coherente con la pregunta del usuario",
+        "url": "http://api:3000/users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        592,
+        160
+      ],
+      "id": "2f99f460-ca64-4690-bbe3-89de949740b3",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Agente tareas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente tareas",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente tareas",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente tareas": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente tareas",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8fabb4ee-7360-4284-b706-c4353fdd4c7b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "afb87d9bf32e6d6aca4e4674472b6ad8115d1de5e21543b15ce3bfb63030af56"
+  },
+  "id": "fwznLQapZxRPiRhS",
+  "tags": []
+}

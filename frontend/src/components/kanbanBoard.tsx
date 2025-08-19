@@ -102,7 +102,7 @@ export default function KanbanBoard() {
           {columns.map((col) => (
             <Column key={col} id={col}>
               {tasks.filter((t) => t.status === col).map((task) => (
-                <TaskCard key={task.id} task={task} />
+                <TaskCard key={task.id} task={task} onDelete={function (id: number): void{}} />
               ))}
             </Column>
           ))}

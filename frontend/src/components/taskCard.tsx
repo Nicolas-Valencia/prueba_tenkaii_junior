@@ -4,14 +4,21 @@ import type { Task } from "../types/Task";
 
 interface TaskCardProps {
     task: Task;
+    onDelete: (id: number) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
     const [expanded, setExpanded] = useState(false);
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: task.id.toString(),
     });
+
+    const handleDelete = () => {
+        if (window.confirm("¿Seguro que deseas eliminar esta tarea?")) {
+            onDelete(task.id);
+        }
+    };
 
     const style = {
         transform: transform
@@ -25,10 +32,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
             style={style}
             className="kanban-task"
         >
+            <button
+                onClick={handleDelete}
+                className="ondelete-button"
+            >
+                ×
+            </button>
             {/* 👇 solo el título es el "handle" para arrastrar */}
             <div
-            {...listeners}
-            {...attributes}
+                {...listeners}
+                {...attributes}
             >
                 <h3
                     className="font-semibold text-lg cursor-grab"
@@ -37,7 +50,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                     {task.title}
                 </h3>
 
-                <p className="" 
+                <p className=""
                 >{task.user?.name}</p>
 
                 {expanded && (
