@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { createTask } from "../services/taskService";
 import { getUsers } from "../services/userService";
 import type { User } from "../types/User";
-import "../styles/createTask.css"; 
+import "../styles/createTask.css";
 
+// Componente para crear una nueva tarea
 export default function CreateTaskForm({ onTaskCreated }: { onTaskCreated: () => void }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
   const [users, setUsers] = useState<User[]>([]);
 
+  // Carga los usuarios al montar el componente
   useEffect(() => {
     getUsers().then(setUsers).catch(console.error);
   }, []);
 
+  // Maneja el envío del formulario
+  // Valida que todos los campos estén completos antes de enviar
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description || !userId) {
@@ -21,6 +25,7 @@ export default function CreateTaskForm({ onTaskCreated }: { onTaskCreated: () =>
       return;
     }
 
+    // Intenta crear la tarea y maneja errores
     try {
       await createTask({ title, description, userId });
       alert("Tarea creada exitosamente");
@@ -34,6 +39,8 @@ export default function CreateTaskForm({ onTaskCreated }: { onTaskCreated: () =>
     }
   };
 
+  // Renderiza el formulario de creación de tarea
+  // Incluye campos para título, descripción y selección de usuario responsable
   return (
     <form onSubmit={handleSubmit} className="form-create-task">
       <h2 className="">Crear nueva tarea</h2>

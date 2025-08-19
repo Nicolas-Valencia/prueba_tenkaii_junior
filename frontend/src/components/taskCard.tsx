@@ -7,6 +7,10 @@ interface TaskCardProps {
     onDelete: (id: number) => void;
 }
 
+// Componente para mostrar una tarjeta de tarea
+// Permite arrastrar y soltar tareas entre columnas
+// También permite expandir para ver más detalles de la tarea
+// Incluye un botón para eliminar la tarea
 const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
     const [expanded, setExpanded] = useState(false);
 
@@ -14,6 +18,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
         id: task.id.toString(),
     });
 
+    // Maneja la eliminación de la tarea
+    // Muestra un mensaje de confirmación antes de eliminar
     const handleDelete = () => {
         if (window.confirm("¿Seguro que deseas eliminar esta tarea?")) {
             onDelete(task.id);
@@ -26,6 +32,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
             : undefined,
     };
 
+    // Renderiza la tarjeta de tarea
+    // Incluye título, descripción, estado y responsable
+    // Permite expandir para ver más detalles
     return (
         <div
             ref={setNodeRef}

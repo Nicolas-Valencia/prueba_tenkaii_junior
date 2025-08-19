@@ -7,9 +7,12 @@ import "../styles/kanban.css";
 import ModalCreateTask from "./modalCreateTask";
 import CreateTaskForm from "./createTaskForm";
 
+// Define las columnas del tablero Kanban
+// Estas son las categorías de estado de las tareas
 const columns = ["Creada", "En Progreso", "Bloqueada", "Finalizada", "Cancelada"];
 
 // --- Column (droppable) ---
+// Componente para una columna del tablero Kanban
 function Column({ id, children }: { id: string; children: React.ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id });
 
@@ -30,6 +33,9 @@ export default function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Cargar tareas desde el backend
+  // Maneja la lógica de carga de tareas y actualiza el estado
+  // Utiliza un efecto para cargar las tareas al montar el componente
   const loadTasks = async () => {
     try {
       const data = await getTasks();
@@ -71,6 +77,9 @@ export default function KanbanBoard() {
     }
   };
 
+  // Maneja la eliminación de una tarea
+  // Llama al servicio de eliminación y actualiza el estado local
+  // Muestra un mensaje de error si falla
   const handleDeleteTask = async (id: number) => {
     try {
       await deleteTask(id);
@@ -81,6 +90,7 @@ export default function KanbanBoard() {
     }
   };
 
+  // Renderiza el tablero Kanban
   return (
     <>
       {/* Botón */}
@@ -120,21 +130,4 @@ export default function KanbanBoard() {
       </DndContext>
     </>
   );
-
-  // return (
-
-  //   <DndContext onDragEnd={handleDragEnd}>
-  //     <div className="kanban-board">
-  //       {columns.map((col) => (
-  //         <Column key={col} id={col}>
-  //           {tasks
-  //             .filter((t) => t.status === col)
-  //             .map((task) => (
-  //               <TaskCard key={task.id} task={task} />
-  //             ))}
-  //         </Column>
-  //       ))}
-  //     </div>
-  //   </DndContext>
-  // );
 }
