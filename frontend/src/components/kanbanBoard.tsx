@@ -1,6 +1,6 @@
 import { DndContext, useDroppable } from "@dnd-kit/core";
 import { useState, useEffect } from "react";
-import { getTasks, updateTask } from "../services/taskService";
+import { deleteTask, getTasks, updateTask } from "../services/taskService";
 import type { Task } from "../types/Task";
 import TaskCard from "./taskCard"; // 👈 ahora usamos el TaskCard unificado
 import "../styles/kanban.css";
@@ -71,6 +71,16 @@ export default function KanbanBoard() {
     }
   };
 
+  const handleDeleteTask = async (id: number) => {
+    try {
+      await deleteTask(id);
+      setTasks((prev) => prev.filter((t) => t.id !== id));
+    } catch (err) {
+      console.error('Error eliminando tarea', err);
+      alert('No se pudo eliminar la tarea (revisa la consola).');
+    }
+  };
+
   return (
     <>
       {/* Botón */}
@@ -102,7 +112,7 @@ export default function KanbanBoard() {
           {columns.map((col) => (
             <Column key={col} id={col}>
               {tasks.filter((t) => t.status === col).map((task) => (
-                <TaskCard key={task.id} task={task} onDelete={function (id: number): void{}} />
+                <TaskCard key={task.id} task={task} onDelete={handleDeleteTask} />
               ))}
             </Column>
           ))}
